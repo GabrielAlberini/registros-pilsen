@@ -72,21 +72,21 @@ function App() {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1>User Registrations</h1>
+      <h1>Registro de usuarios | Cerveceria Santa Fe</h1>
       <div>
-        <h2>Total Registrations by Date:</h2>
+        <h2>Total de registros por día:</h2>
         <ul>
           {Object.entries(registrationsPerDay).map(([date, count]) => (
             <li key={date}>
-              {date}: {count} registration{count > 1 ? "s" : ""}
+              {date}: {count} registro{count > 1 ? "s" : ""}
             </li>
           ))}
         </ul>
       </div>
-      <h2>All Users:</h2>
+      <h2>Registros:</h2>
       <div>
         {users.length === 0 ? (
-          <p>No users found.</p>
+          <p>Cargando data...</p>
         ) : (
           <table
             style={{
@@ -102,7 +102,7 @@ function App() {
                   DNI
                 </th>
                 <th style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  Registration Date
+                  Día de registro
                 </th>
               </tr>
             </thead>
