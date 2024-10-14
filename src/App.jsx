@@ -97,6 +97,9 @@ function App() {
           >
             <thead>
               <tr style={{ backgroundColor: "#f2f2f2" }}>
+                <th style={{ border: "1px solid #ddd", padding: "8px" }}>
+                  N° Registro
+                </th>
                 <th style={{ border: "1px solid #ddd", padding: "8px" }}>ID</th>
                 <th style={{ border: "1px solid #ddd", padding: "8px" }}>
                   DNI
@@ -107,8 +110,11 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
+              {users.map((user, index) => (
                 <tr key={user.id} style={{ border: "1px solid #ddd" }}>
+                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                    {index + 1}
+                  </td>
                   <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                     {user.id}
                   </td>
