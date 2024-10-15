@@ -2,33 +2,25 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase";
 
-// Function to format the date
+// Function to format the date and time
 const formatDate = (dateString) => {
   const options = { year: "numeric", month: "long", day: "numeric" };
   const date = new Date(dateString);
   return date.toLocaleDateString(undefined, options); // Format to a readable one
 };
 
-// Function to parse the formatted date string back to Date object
-const parseDate = (dateString) => {
-  const months = {
-    enero: 0,
-    febrero: 1,
-    marzo: 2,
-    abril: 3,
-    mayo: 4,
-    junio: 5,
-    julio: 6,
-    agosto: 7,
-    septiembre: 8,
-    octubre: 9,
-    noviembre: 10,
-    diciembre: 11,
-  };
-
-  const [day, month, year] = dateString.split(" de ");
-  return new Date(year, months[month.toLowerCase()], day); // Construct a Date object
+// Function to format the time
+const formatTime = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
 };
+
+// Function to parse date and time from ISO string
+const parseDateTime = (dateString) => new Date(dateString);
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -44,14 +36,17 @@ function App() {
             id: doc.id,
             dni: data.dni, // Assuming 'dni' is stored in the user data
             registrationDate: formatDate(data.registrationDate), // Format the date
+            registrationTime: formatTime(data.registrationDate), // Format the time
+            rawDateTime: data.registrationDate, // Store raw date-time for sorting
           };
         });
 
-        // Sort users by registration date (oldest to newest)
-        usersList.sort(
-          (a, b) =>
-            parseDate(a.registrationDate) - parseDate(b.registrationDate)
-        );
+        // Sort users by registration date (day) and then by time (oldest to newest)
+        usersList.sort((a, b) => {
+          const dateA = parseDateTime(a.rawDateTime);
+          const dateB = parseDateTime(b.rawDateTime);
+          return dateA - dateB; // Sort by both date and time
+        });
 
         setUsers(usersList);
 
@@ -107,6 +102,9 @@ function App() {
                 <th style={{ border: "1px solid #ddd", padding: "8px" }}>
                   Día de registro
                 </th>
+                <th style={{ border: "1px solid #ddd", padding: "8px" }}>
+                  Hora de registro
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -123,6 +121,9 @@ function App() {
                   </td>
                   <td style={{ border: "1px solid #ddd", padding: "8px" }}>
                     {user.registrationDate}
+                  </td>
+                  <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                    {user.registrationTime}
                   </td>
                 </tr>
               ))}
